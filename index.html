@@ -129,4 +129,105 @@ function brain(q){const s=q.toLowerCase(),num=(s.match(/\d{2,3}/)||[])[0],bpm=nu
  return 'Nie zrozumiałem. Napisz "pomoc", żeby zobaczyć komendy.'}
 function send(){const v=document.getElementById('in').value.trim();if(!v)return;say('u',v);document.getElementById('in').value='';const r=brain(v);setTimeout(()=>say('b',r),200)}
 document.getElementById('in').onkeydown=e=>{if(e.key=='Enter')send()};say('b','Cześć! 🐉 Jestem mózgiem SI. Steruję DJ-em po polsku — spróbuj: "graj techno 140", "auto mix", "scratch", "generuj loop", "efekt echo".');
-</script></body></html>
+</script><div class="p" id="t-pad"><div class="box">
+<div class="row">Pack <select id="pk"></select> BPM <input id="pbpm" type="number" value="128" style="width:56px"> Tonacja <select id="pkey"></select>
+<button id="fdb" onclick="P.finger(!P.fing)">🥁 Finger drum: OFF</button><button onclick="P.stopAll()">⏹ Stop pady</button></div>
+<div id="pgrid" style="display:grid;grid-template-columns:repeat(6,1fr);gap:4px;margin-top:8px"></div>
+<div id="pcols" style="display:grid;grid-template-columns:repeat(6,1fr);gap:4px;margin-top:4px"></div></div>
+<div class="box"><b>Sekwencer 16 kroków</b> — pad: <span id="sqn">kliknij długo / ✎ pad</span><div class="steps" id="psq" style="margin-top:6px"></div></div>
+<div class="box"><b>Instant FX XY</b> <select id="xyf"><option value="filter">Filtr</option><option value="gate">Gate</option><option value="stutter">Stutter</option><option value="delay">Delay</option><option value="reverb">Reverb</option><option value="brake">Vinyl brake</option><option value="flanger">Flanger</option></select>
+<div id="xy" style="margin-top:6px;height:170px;border:1px solid #f0f;border-radius:12px;background:linear-gradient(135deg,#200040,#002030);position:relative;touch-action:none"><div id="xyd" style="position:absolute;width:26px;height:26px;border-radius:50%;background:#0ff;box-shadow:0 0 15px #0ff;display:none;transform:translate(-50%,-50%)"></div></div></div>
+<div class="box row"><b>Looper</b> <select id="lbars"><option>1</option><option selected>2</option><option>4</option></select> takty <button onclick="P.loopRec()">⏺ Nagraj pętlę</button><button onclick="P.loopStop()">⏹ Stop pętli</button>
+<b style="margin-left:10px">Sesja</b> <button id="srb" onclick="P.sessRec()">⏺ Nagrywaj sesję</button><button onclick="P.sessSave()">💾 Eksport WAV</button><span id="pst" style="color:#0f8"></span></div></div>
+<script>
+TABS.splice(1,0,['pad','🟪 Pady']);nav.innerHTML=TABS.map(t=>`<button data-t="${t[0]}" onclick="tab('${t[0]}')">${t[1]}</button>`).join('');tab('dj');
+const COLS=[['DRUMS','#ff2d75'],['PERC','#ff9d00'],['BAS','#00e5ff'],['SYNTH','#9d4dff'],['WOKAL','#39ff14'],['FX','#ffe600']];
+const PACKS={techno:{bpm:130,root:45,wave:'sawtooth',sw:0},house:{bpm:124,root:48,wave:'square',sw:.12},psy:{bpm:145,root:40,wave:'sawtooth',sw:0},dnb:{bpm:174,root:43,wave:'square',sw:0},'hip-hop':{bpm:90,root:41,wave:'triangle',sw:.18},trap:{bpm:140,root:42,wave:'sine',sw:0}};
+const KEYS=['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];pk.innerHTML=Object.keys(PACKS).map(k=>`<option>${k}</option>`).join('');pkey.innerHTML=KEYS.map((k,i)=>`<option value="${i}">${k}m</option>`).join('');pkey.value=9;
+function rng(s){return()=>{s=(s*16807)%2147483647;return s/2147483647}}
+const mtof=m=>440*Math.pow(2,(m-69)/12),SCL=[0,3,5,7,10,12,15,17];
+const P={pads:[],col:[],act:Array(6).fill(-1),pend:Array(6).fill(null),step:0,next:0,rate:1,fing:false,sel:null,fx:null,rec:null,recBuf:null,loopSrc:null,
+init(){if(this.inN)return;ac();const c=C;this.inN=c.createGain();this.flt=c.createBiquadFilter();this.flt.type='lowpass';this.flt.frequency.value=20000;this.gate=c.createGain();
+ this.dly=c.createDelay(2);this.dfb=c.createGain();this.dfb.gain.value=0;this.dwet=c.createGain();this.dwet.gain.value=0;
+ this.rev=c.createConvolver();const L=c.sampleRate*2.5,ir=c.createBuffer(2,L,c.sampleRate);for(let ch=0;ch<2;ch++){const d=ir.getChannelData(ch);for(let i=0;i<L;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/L,3)}this.rev.buffer=ir;this.rwet=c.createGain();this.rwet.gain.value=0;
+ this.fl=c.createDelay(.05);this.fl.delayTime.value=.005;this.flo=c.createOscillator();this.flo.frequency.value=.3;this.fld=c.createGain();this.fld.gain.value=0;this.flo.connect(this.fld);this.fld.connect(this.fl.delayTime);this.flo.start();this.flw=c.createGain();this.flw.gain.value=0;
+ this.out=c.createGain();this.inN.connect(this.flt);this.flt.connect(this.gate);const g=this.gate;g.connect(this.out);g.connect(this.dly);this.dly.connect(this.dfb);this.dfb.connect(this.dly);this.dly.connect(this.dwet);this.dwet.connect(this.out);
+ g.connect(this.rev);this.rev.connect(this.rwet);this.rwet.connect(this.out);g.connect(this.fl);this.fl.connect(this.flw);this.flw.connect(this.out);this.out.connect(master);
+ this.col=COLS.map(()=>{const n=c.createGain();n.connect(this.inN);return n});this.colState=COLS.map(()=>({v:.8,m:false,s:false}));this.mix();
+ this.tap=c.createScriptProcessor(4096,2,2);(master.limOut||master).connect(this.tap);const z=c.createGain();z.gain.value=0;this.tap.connect(z);z.connect(c.destination);
+ this.tap.onaudioprocess=e=>{const a=e.inputBuffer;if(this.rec)this.rec.push([a.getChannelData(0).slice(),a.getChannelData(1).slice()]);if(this.lrec){this.lrec.push([a.getChannelData(0).slice(),a.getChannelData(1).slice()]);this.lrecN-=a.length;if(this.lrecN<=0)this.loopDone()}};
+ this.next=C.currentTime+.05},
+build(){const pack=PACKS[pk.value],R=rng(Object.keys(PACKS).indexOf(pk.value)*999+7);this.pads=[];
+ for(let r=0;r<8;r++)for(let c=0;c<6;c++){const st=Array.from({length:16},(_,i)=>{const p=[[i%4==0?1:(R()<.08)],[R()<(c==1?.35:0)],[i%4==2||R()<.25],[R()<.3],[R()<.2],[i==0]][c][0];return p?1:0});
+  if(c==0&&r>3)st.forEach((_,i)=>st[i]=(i%4==0||i==10||(r>5&&i%2==1&&R()<.5))?1:0);if(c==1)for(let i=2;i<16;i+=4)st[i]=R()<.8?1:st[i];
+  if(pk.value=='dnb'&&c==0){st.fill(0);[0,10].forEach(i=>st[i]=1);[4,12].forEach(i=>st[i]=2)}if(pk.value=='trap'&&c==1)st.forEach((_,i)=>st[i]=R()<.7?1:0);
+  this.pads.push({r,c,st,notes:st.map(()=>SCL[Math.floor(R()*SCL.length)]),v:r})}
+ pbpm.value=pack.bpm;this.draw()},
+draw(){pgrid.innerHTML=this.pads.map((p,i)=>`<div data-i="${i}" style="height:44px;border-radius:7px;border:2px solid ${COLS[p.c][1]};background:${this.act[p.c]==i?COLS[p.c][1]:this.pend[p.c]===i?COLS[p.c][1]+'66':'#0b0016'};box-shadow:0 0 ${this.act[p.c]==i?14:4}px ${COLS[p.c][1]};font-size:.65em;color:#fff;display:flex;align-items:center;justify-content:center;user-select:none">${COLS[p.c][0][0]}${p.r+1}</div>`).join('');
+ pgrid.querySelectorAll('div').forEach(d=>{const i=+d.dataset.i;let t;d.onpointerdown=e=>{e.preventDefault();t=setTimeout(()=>{t=null;this.edit(i)},450);if(this.fing){this.oneShot(i)}};d.onpointerup=()=>{if(t){clearTimeout(t);if(!this.fing)this.launch(i)}}});
+ pcols.innerHTML=COLS.map((c,i)=>{const s=this.colState?this.colState[i]:{v:.8,m:0,s:0};return`<div style="text-align:center;font-size:.7em;color:${c[1]}">${c[0]}<input type="range" min="0" max="1" step=".01" value="${s.v}" oninput="P.colState[${i}].v=+this.value;P.mix()"><button style="padding:2px 5px;${s.m?'background:#f33;color:#000':''}" onclick="P.mute(${i})">M</button><button style="padding:2px 5px;${s.s?'background:#ff0;color:#000':''}" onclick="P.solo(${i})">S</button></div>`}).join('')},
+mix(){if(!this.col.length)return;const any=this.colState.some(s=>s.s);this.col.forEach((g,i)=>{const s=this.colState[i];g.gain.value=s.m||(any&&!s.s)?0:s.v})},
+mute(i){this.init();this.colState[i].m=!this.colState[i].m;this.mix();this.draw()},solo(i){this.init();this.colState[i].s=!this.colState[i].s;this.mix();this.draw()},
+launch(i){this.init();const p=this.pads[i];this.pend[p.c]=this.act[p.c]==i?-1:i;this.draw();B.status(`Pad ${COLS[p.c][0]} ${p.r+1} → start na następnym takcie`)},
+stopAll(){this.act.fill(-1);this.pend.fill(null);this.draw();return '⏹ Pady zatrzymane.'},
+oneShot(i){this.init();const p=this.pads[i];const k=p.st.findIndex(x=>x);this.voice(p,k<0?0:k,C.currentTime,true)},
+edit(i){this.sel=i;const p=this.pads[i];sqn.textContent=COLS[p.c][0]+' '+(p.r+1);psq.innerHTML=p.st.map((v,k)=>`<b class="${v?'x':''}" onclick="P.pads[${i}].st[${k}]^=1;P.edit(${i})"></b>`).join('')},
+voice(p,k,t,shot){const c=C,o=this.col[p.c],key=+pkey.value,pack=PACKS[pk.value],n=pack.root+key-9+p.notes[k],v=p.v,env=(g,a,d)=>{g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(a,t+.005);g.gain.exponentialRampToValueAtTime(.0001,t+d)};
+ const nz=(d,f,a,ty,q)=>{const s=c.createBufferSource();s.buffer=noise();const fl=c.createBiquadFilter();fl.type=ty;fl.frequency.value=f;if(q)fl.Q.value=q;const g=c.createGain();env(g,a,d);s.connect(fl);fl.connect(g);g.connect(o);s.start(t);s.stop(t+d+.02)};
+ if(p.c==0){if(p.st[k]==2||(v%2&&k%8==4)){nz(.18,1800,.6,'bandpass',1);return}const os=c.createOscillator(),g=c.createGain();const f0=pk.value=='trap'?60:150;os.frequency.setValueAtTime(f0+v*8,t);os.frequency.exponentialRampToValueAtTime(38,t+(pk.value=='trap'?.6:.15));env(g,1,pk.value=='trap'?.8:.3);os.connect(g);g.connect(o);os.start(t);os.stop(t+.9)}
+ else if(p.c==1){v<3?nz(.04+v*.02,7000+v*800,.35,'highpass'):v<6?nz(.12,v*600,.4,'bandpass',6):(()=>{const os=c.createOscillator(),g=c.createGain();os.type='triangle';os.frequency.setValueAtTime(400+v*90,t);os.frequency.exponentialRampToValueAtTime(200,t+.1);env(g,.4,.12);os.connect(g);g.connect(o);os.start(t);os.stop(t+.15)})()}
+ else if(p.c==2){const os=c.createOscillator(),f=c.createBiquadFilter(),g=c.createGain();os.type=v<4?pack.wave:'sawtooth';os.frequency.value=mtof(n-12+(v>5?12:0));f.type='lowpass';f.Q.value=pk.value=='psy'||v>5?14:5;f.frequency.setValueAtTime(300+v*250,t);f.frequency.exponentialRampToValueAtTime(90,t+.18);env(g,.45,pk.value=='hip-hop'||pk.value=='trap'?.5:.2);os.connect(f);f.connect(g);g.connect(o);os.start(t);os.stop(t+.6)}
+ else if(p.c==3){[0,v%2?7:3,v>3?10:7].forEach((iv,j)=>{const os=c.createOscillator(),f=c.createBiquadFilter(),g=c.createGain();os.type=j?'sawtooth':pack.wave;os.frequency.value=mtof(n+12+iv);os.detune.value=(j-1)*8;f.type='lowpass';f.frequency.setValueAtTime(800+v*400,t);f.frequency.exponentialRampToValueAtTime(400,t+.3);env(g,.12,v>4?.6:.22);os.connect(f);f.connect(g);g.connect(o);os.start(t);os.stop(t+.7)})}
+ else if(p.c==4){const F=[[800,1150],[400,1600],[350,2300],[600,1000],[270,2100],[500,1500],[700,1200],[300,870]],fm=F[(v+k)%8],src=c.createOscillator();src.type='sawtooth';src.frequency.value=mtof(n+12);const g=c.createGain();env(g,.5,.25);
+  fm.forEach(ff=>{const b=c.createBiquadFilter();b.type='bandpass';b.frequency.value=ff;b.Q.value=9;src.connect(b);b.connect(g)});g.connect(o);src.start(t);src.stop(t+.3)}
+ else {if(v<3){const s=c.createBufferSource();s.buffer=noise();s.loop=true;const f=c.createBiquadFilter();f.type='bandpass';f.Q.value=6;const d=60/+pbpm.value*4;f.frequency.setValueAtTime(300,t);f.frequency.exponentialRampToValueAtTime(8000,t+d);const g=c.createGain();g.gain.setValueAtTime(.01,t);g.gain.linearRampToValueAtTime(.3,t+d);g.gain.linearRampToValueAtTime(0,t+d+.05);s.connect(f);f.connect(g);g.connect(o);s.start(t);s.stop(t+d+.1)}
+  else if(v<5){nz(1.5,600+v*300,.4,'lowpass')}else{const os=c.createOscillator(),g=c.createGain();os.type='square';os.frequency.setValueAtTime(mtof(n+24),t);os.frequency.exponentialRampToValueAtTime(mtof(n),t+.4);env(g,.15,.4);os.connect(g);g.connect(o);os.start(t);os.stop(t+.45)}}},
+tick(){if(!this.inN)return;const bpm=+pbpm.value||128,sp=60/bpm/4/this.rate,sw=PACKS[pk.value].sw;let ch=false;
+ while(this.next<C.currentTime+.12){const s=this.step%16;if(s==0){this.pend.forEach((x,c)=>{if(x!==null){this.act[c]=x;this.pend[c]=null;ch=true}})}
+  const ss=this.stut?this.stutS:s;this.act.forEach(i=>{if(i>=0&&this.pads[i].st[ss])this.voice(this.pads[i],ss,this.next+(s%2?sw*sp:0))});this.next+=sp;this.step++}
+ if(ch)this.draw();if(this.step%16==0)pst.textContent=' krok '+(this.step%16+1)},
+setXY(x,y){this.init();const t=C.currentTime,f=xyf.value;this.resetFx(f);
+ if(f=='filter'){this.flt.type=x<.5?'lowpass':'highpass';this.flt.frequency.value=x<.5?200+Math.pow(x*2,2)*19800:20+Math.pow((x-.5)*2,2)*6000;this.flt.Q.value=1+y*15}
+ if(f=='gate'){this.gateOn=[1,2,4,8][Math.floor(x*3.99)];this.gateD=y}
+ if(f=='stutter'){this.stut=true;this.stutS=this.step%16;this.rate=[1,2,4,8][Math.floor(x*3.99)]}
+ if(f=='delay'){this.dly.delayTime.value=60/+pbpm.value*[.25,.5,.75,1][Math.floor(x*3.99)];this.dwet.gain.value=.6;this.dfb.gain.value=y*.85}
+ if(f=='reverb'){this.rwet.gain.value=x*1.2;this.flt.frequency.value=2000+y*18000}
+ if(f=='brake'){this.rate=Math.max(.05,1-x*.95);this.out.gain.value=1-x*.7}
+ if(f=='flanger'){this.flw.gain.value=.7;this.flo.frequency.value=.1+x*4;this.fld.gain.value=.001+y*.004}},
+resetFx(keep){if(!this.inN)return;if(keep!='filter'){this.flt.type='lowpass';this.flt.frequency.value=20000;this.flt.Q.value=1}if(keep!='gate')this.gateOn=0;if(keep!='stutter'){this.stut=false}if(keep!='stutter'&&keep!='brake')this.rate=1;
+ if(keep!='delay'){this.dwet.gain.value=0;this.dfb.gain.value=0}if(keep!='reverb')this.rwet.gain.value=0;if(keep!='brake')this.out.gain.value=1;if(keep!='flanger'){this.flw.gain.value=0}},
+gateTick(){if(!this.inN)return;const g=this.gate.gain;if(!this.gateOn){g.value=1;return}const per=60/+pbpm.value/this.gateOn,ph=(C.currentTime%per)/per;g.value=ph<(.2+this.gateD*.7)?1:0},
+finger(on){this.fing=on;fdb.textContent='🥁 Finger drum: '+(on?'ON':'OFF');fdb.classList.toggle('on',on);return on?'🥁 Finger drumming włączony — każdy pad gra od razu.':'Finger drumming wyłączony — pady startują w takcie.'},
+toBuf(chunks){const n=chunks.reduce((a,c)=>a+c[0].length,0),b=C.createBuffer(2,n,C.sampleRate);let o=0;chunks.forEach(c=>{b.getChannelData(0).set(c[0],o);b.getChannelData(1).set(c[1],o);o+=c[0].length});return b},
+loopRec(){this.init();this.loopStop();this.lrec=[];this.lrecN=C.sampleRate*60/+pbpm.value*4*+lbars.value;pst.textContent=' ⏺ nagrywam pętlę…';return `⏺ Nagrywam pętlę ${lbars.value} takty — graj!`},
+loopDone(){const b=this.toBuf(this.lrec);this.lrec=null;const s=C.createBufferSource();s.buffer=b;s.loop=true;s.connect(this.inN);s.start();this.loopSrc=s;pst.textContent=' 🔁 pętla gra'},
+loopStop(){if(this.loopSrc){this.loopSrc.stop();this.loopSrc=null}return '⏹ Looper zatrzymany.'},
+sessRec(){this.init();if(this.rec){srb.textContent='⏺ Nagrywaj sesję';const r=this.rec;this.rec=null;this.last=r;pst.textContent=` sesja ${(r.length*4096/C.sampleRate).toFixed(1)} s`;return 'Nagrywanie sesji zatrzymane — napisz "zapisz wav".'}
+ this.rec=[];srb.textContent='⏹ Stop nagrywania';pst.textContent=' ⏺ REC sesji';return '⏺ Nagrywam całą sesję (decki + pady).'},
+sessSave(){const r=this.rec||this.last;if(!r||!r.length)return 'Brak nagrania — najpierw "nagrywaj sesję".';const b=this.toBuf(r),n=b.length,sr=C.sampleRate,buf=new ArrayBuffer(44+n*4),dv=new DataView(buf),ws=(o,s)=>[...s].forEach((ch,i)=>dv.setUint8(o+i,ch.charCodeAt(0)));
+ ws(0,'RIFF');dv.setUint32(4,36+n*4,true);ws(8,'WAVE');ws(12,'fmt ');dv.setUint32(16,16,true);dv.setUint16(20,1,true);dv.setUint16(22,2,true);dv.setUint32(24,sr,true);dv.setUint32(28,sr*4,true);dv.setUint16(32,4,true);dv.setUint16(34,16,true);ws(36,'data');dv.setUint32(40,n*4,true);
+ const L=b.getChannelData(0),Rr=b.getChannelData(1);for(let i=0;i<n;i++){dv.setInt16(44+i*4,Math.max(-1,Math.min(1,L[i]))*32767,true);dv.setInt16(46+i*4,Math.max(-1,Math.min(1,Rr[i]))*32767,true)}
+ const name='DJ777-sesja-'+Date.now()+'.wav';if(window.DJ777App){let s='',u=new Uint8Array(buf);for(let i=0;i<u.length;i+=32768)s+=String.fromCharCode.apply(null,u.subarray(i,i+32768));return '💾 '+DJ777App.saveWav(name,btoa(s))}
+ const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([buf],{type:'audio/wav'}));a.download=name;a.click();return `💾 Zapisano ${name} (${(n/sr).toFixed(1)} s).`}};
+pk.onchange=()=>{P.build();P.stopAll()};P.build();edit0=()=>P.edit(0);edit0();
+setInterval(()=>{P.tick();P.gateTick()},25);
+const xyE=document.getElementById('xy'),xyM=e=>{const r=xyE.getBoundingClientRect(),x=Math.max(0,Math.min(1,(e.clientX-r.left)/r.width)),y=1-Math.max(0,Math.min(1,(e.clientY-r.top)/r.height));xyd.style.display='block';xyd.style.left=x*100+'%';xyd.style.top=(1-y)*100+'%';P.setXY(x,y)};
+xyE.onpointerdown=e=>{xyE.setPointerCapture(e.pointerId);xyM(e);xyE.onpointermove=xyM};xyE.onpointerup=()=>{xyE.onpointermove=null;xyd.style.display='none';P.resetFx()};
+/* chat SI → pady */
+const _brain=brain;brain=function(q){const s=q.toLowerCase(),num=+(s.match(/\d+/)||[0])[0];
+ const pack=Object.keys(PACKS).find(k=>s.includes(k)||(k=='hip-hop'&&s.includes('hip hop')));
+ if(/pady|pad pack|paczk|sample/.test(s)&&pack){pk.value=pack;P.build();P.stopAll();tab('pad');return `🟪 Załadowałem paczkę ${pack} (${PACKS[pack].bpm} BPM).`}
+ let m=s.match(/pad\w*\s+(\d)\s+(\d)/);if(m){const c=+m[1]-1,r=+m[2]-1;if(c>=0&&c<6&&r>=0&&r<8){P.launch(r*6+c);tab('pad');return `🟪 Odpalam pad ${COLS[c][0]} ${r+1} (w takcie).`}}
+ m=s.match(/(drums|perc|bas|synth|wokal|vocal|fx)\w*/);if(/odpal|graj|włącz/.test(s)&&m&&/pad|kolumn/.test(s)){const c=['drums','perc','bas','synth','wokal','fx'].indexOf(m[1]=='vocal'?'wokal':m[1]);P.launch(Math.floor(Math.random()*8)*6+c);tab('pad');return `🟪 Odpalam ${COLS[c][0]}.`}
+ if(/pady.*(start|graj|odpal)|(graj|odpal).*pady|wszystkie pady/.test(s)){P.init();for(let c=0;c<5;c++)P.launch(Math.floor(Math.random()*8)*6+c);tab('pad');return '🟪 Odpalam zestaw padów: drums, perc, bas, synth, wokal.'}
+ if(/stop.*pad|pady stop/.test(s))return P.stopAll();
+ m=s.match(/(wycisz|mute|solo)\s+(drums|perc|bas|synth|wokal|fx)/);if(m){const c=['drums','perc','bas','synth','wokal','fx'].indexOf(m[2]);m[1]=='solo'?P.solo(c):P.mute(c);return `${m[1]} ${COLS[c][0]} przełączone.`}
+ if(/finger/.test(s))return P.finger(!/off|wyłącz/.test(s));
+ if(/nagraj pętl|looper|loop rec/.test(s))return P.loopRec();if(/stop pętl|stop looper/.test(s))return P.loopStop();
+ if(/nagrywaj|nagraj sesj|rec sesj|stop nagryw/.test(s))return P.sessRec();if(/zapisz|eksport|wav/.test(s))return P.sessSave();
+ m=s.match(/tonacj\w*\s+([a-g]#?)/);if(m){pkey.value=KEYS.indexOf(m[1].toUpperCase());return `🎼 Tonacja padów: ${m[1].toUpperCase()}m.`}
+ if(/bpm.*pad|pad.*bpm/.test(s)&&num>=60&&num<=200){pbpm.value=num;return `Pady: ${num} BPM.`}
+ m=s.match(/xy\s+(filtr|gate|stutter|delay|reverb|brake|flanger)/);if(m){xyf.value=m[1]=='filtr'?'filter':m[1];P.setXY(.3,.7);setTimeout(()=>P.resetFx(),4000);return `✨ Instant FX ${m[1]} (4 s).`}
+ const r=_brain(q);return /pomoc|help|komend/.test(s)?r+' · PADY: pady techno/house/psy/dnb/hip-hop/trap · graj pady · pad 3 2 · solo bas · wycisz drums · finger drum · xy reverb · tonacja D · bpm pady 128 · nagraj pętlę · nagrywaj · zapisz wav':r};
+</script>
+</body></html>
