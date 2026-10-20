@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="pl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>DJ 777 SI v4.0</title>
+<!DOCTYPE html><html lang="pl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>DJ 777 SI v5.0</title>
 <style>
 body{margin:0;background:#07020f;color:#e8f;font-family:system-ui,sans-serif}
 #splash{position:fixed;inset:0;background:radial-gradient(#3a0060,#000);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9;transition:opacity 1s}
@@ -21,10 +21,10 @@ button{background:#14002a;color:#0ff;border:1px solid #0ff;border-radius:8px;pad
 #brain{position:sticky;top:0;z-index:5;background:#0a0018ee;border-bottom:1px solid #f0f;padding:5px;font-size:.8em;text-align:center;color:#0ff}
 .steps{display:grid;grid-template-columns:repeat(16,1fr);gap:2px}.steps b{height:22px;background:#200040;border-radius:3px;cursor:pointer}.steps b.x{background:#f0f;box-shadow:0 0 6px #f0f}
 </style></head><body>
-<div id="splash"><div class="d">🐉</div><h1>DJ 777 SI</h1><div style="color:#f6f">SUPER AI · v4.0 · DJ DaX Kraków</div></div>
+<div id="splash"><div class="d">🐉</div><h1>DJ 777 SI</h1><div style="color:#f6f">SUPER AI · v5.0 · DJ DaX Kraków</div></div>
 <div id="brain">🧠 Mózg SI: <span id="bs">gotowy</span></div>
-<h1>🐉 DJ 777 SI</h1><div class="sub">SUPER AI v4.0 · DJ DaX · Kraków</div>
-<a href="DJ-777-SI.apk" download style="display:block;text-align:center;margin:10px auto;width:80%;background:linear-gradient(90deg,#f0f,#0ff);color:#000;padding:13px;border-radius:30px;font-weight:bold;text-decoration:none;box-shadow:0 0 20px #f0f">⬇ Pobierz APK v4.0 (Android)</a><nav id="nav"></nav>
+<h1>🐉 DJ 777 SI</h1><div class="sub">SUPER AI v5.0 · DJ DaX · Kraków</div>
+<a href="DJ-777-SI.apk" download style="display:block;text-align:center;margin:10px auto;width:80%;background:linear-gradient(90deg,#f0f,#0ff);color:#000;padding:13px;border-radius:30px;font-weight:bold;text-decoration:none;box-shadow:0 0 20px #f0f">⬇ Pobierz APK v5.0 (Android, free)</a><p style="text-align:center"><a href="downloads.html" style="color:#0ff">📦 Darmowe pobieranie (wszystkie aplikacje + Mózg AI)</a> · <a href="sales.html" style="color:#ff0">💎 PRO</a> · <a href="https://danieldydo-cyber.github.io/ghost-x-g/" style="color:#B388FF">👻 Ghost X G</a></p><nav id="nav"></nav>
 <div class="p" id="t-dj"><div class="box row"><b>Master</b> <input type="range" id="mv" min="0" max="1" step=".01" value=".8" style="width:150px"> <button onclick="B.stopAll()">⏹ STOP ALL</button></div><div class="decks" id="decks"></div></div>
 <div class="p" id="t-ai"><div class="box"><h3>🤖 AI DJ / Auto Mix</h3><p>SI sama wybiera decki, zgrywa BPM i płynnie miksuje co kilka taktów.</p>
 <div class="row"><button onclick="B.autoMix(true)">▶ Start Auto Mix</button><button onclick="B.autoMix(false)">⏹ Stop</button></div>
@@ -579,5 +579,115 @@ const _b3=brain;brain=function(q){const s=q.toLowerCase();
  if(/builder|zbuduj|zr[oó]b (apk|aplikacj|stron)/.test(s)){tab('build');const t=/radio/.test(s)?'radio':/viz|wizual/.test(s)?'viz':/landing|stron/.test(s)?'landing':/dj/.test(s)?'dj':bt.value;bt.value=t;const nm=q.match(/["„](.+?)["”]/);if(nm)bn.value=nm[1];if(/pobierz|zip|pwa/.test(s))return BLD.dl(/zip|pwa/.test(s)?'zip':'html');return BLD.preview()}
  if(/\bdxf\b|d bot|liquid|kali/.test(s)){tab('dxf');return DXF.open(/kali/.test(s)?'kali.html':/pro/.test(s)?'pro-dj.html':/classic/.test(s)?'classic.html':'index.html')}
  const r=_b3(q);return /pomoc|help|komend/.test(s)?r+' · v4: zrób kawałek trap 140 g-moll · radio rmf / radio techno / radio polska / stop radio · vizualizer milkdrop/shader/gwiazdy/kalejdoskop/koło/pierścienie/tunel 3d · vizualizer pełny · mikrofon · agenci · builder landing "Nazwa" · builder dj pobierz zip · dxf / kali / pro dj':r};
+</script>
+<div class="p" id="t-brain"><div class="box"><h3>🧠 Mózg AI SI — darmowy, lokalny model językowy</h3>
+<div style="font-size:.8em;color:#aaa">Model pobierasz raz z Hugging Face (licencje Apache-2.0), zapisuje się w pamięci przeglądarki/aplikacji (OPFS) i potem działa <b>offline na CPU</b> przez wllama (WASM, wbudowane w APK). Nic nie jest wysyłane na serwer.</div>
+<label style="display:block;margin:6px 0"><input type="checkbox" id="bmode"> Tryb <b>Mózg AI</b> w Chat SI (komendy DJ dalej działają, resztę odpowiada model; bez modelu → bot regułowy)</label>
+<div id="bml" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:6px"></div>
+<div class="row"><button onclick="BRAIN.sizes()">📏 Sprawdź rozmiary online</button><button onclick="BRAIN.unload()">⏏ Zwolnij RAM</button><button id="bgpu" onclick="BRAIN.webllm()" style="display:none">⚡ WebLLM (WebGPU, Qwen 0.5B)</button></div>
+<div id="brst" style="color:#0f8;margin:6px 0">Brak załadowanego modelu.</div>
+<div class="row"><input id="bq" style="flex:1;padding:8px;background:#14002a;color:#fff;border:1px solid #f0f;border-radius:8px" placeholder="Zapytaj Mózg AI…"><button onclick="BRAIN.test()">🧠 Zapytaj</button></div><div id="bans" style="white-space:pre-wrap;margin-top:6px"></div></div></div>
+<div class="p" id="t-pro"><div class="box"><h3>💎 FREE vs PRO</h3><div id="prost" style="font-size:1.1em;margin:6px 0"></div><div id="pro_msg" style="color:#ff0"></div>
+<table style="width:100%;font-size:.85em;border-collapse:collapse;margin:8px 0" id="protab"></table>
+<div class="box" id="paybox"><h3>Kup PRO — 5 zł / 1 € / 1 $ (dożywotnio)</h3>
+<p>Twój numer zamówienia: <b id="ord" style="color:#0ff;font-size:1.2em"></b> <button onclick="navigator.clipboard&&navigator.clipboard.writeText(PRO.order())">📋</button></p>
+<p>📱 <b>BLIK na telefon:</b> 730 377 357 (Daniel Dydo) — kwota 5 zł, w tytule numer zamówienia.</p>
+<p>🏦 <b>Przelew (Nest Bank):</b> PL45 1870 1045 2083 1058 7576 0001<br>Odbiorca: Daniel Dydo · Tytuł: <b id="ttl"></b> · Kwota: 5 zł (lub 1 € / 1 $ równowartość)</p>
+<p id="cards"></p>
+<a class="wa" id="prowa" target="_blank">💬 Wyślij potwierdzenie na WhatsApp</a>
+<p style="font-size:.8em;color:#aaa">Płatność weryfikuje ręcznie Daniel (bez automatów). Po zaksięgowaniu dostaniesz na WhatsApp klucz PRO przypisany do Twojego numeru zamówienia — zwykle tego samego dnia.</p></div>
+<div class="row"><input id="pkey_in" style="flex:1;padding:8px;background:#14002a;color:#fff;border:1px solid #0ff;border-radius:8px" placeholder="Wklej klucz PRO (PRO.DX-…)"><button onclick="PRO.activate(pkey_in.value).then(r=>pro_msg.textContent=r)">🔓 Aktywuj</button></div>
+<p><a href="downloads.html" target="_blank" style="color:#0ff">📦 Darmowe pobieranie: aplikacje + Mózg AI</a> · <a href="sales.html" target="_blank" style="color:#f0f">🛒 Strona sprzedaży</a></p></div></div>
+<style>.deck.locked{opacity:.45;position:relative}.deck.locked::after{content:'🔒 PRO';position:absolute;top:8px;right:10px;color:#ff0;font-weight:bold}#protab td{border:1px solid #333;padding:4px}</style>
+<script>
+window.BRAND=window.BRAND||{name:'DJ 777 SI',id:'dj777si',ver:'5.0',theme:'neon'};
+/* ===== tabs v5 ===== */
+TABS.splice(1,0,['brain','🧠 Mózg AI'],['pro','💎 PRO']);nav.innerHTML=TABS.map(t=>`<button data-t="${t[0]}" onclick="tab('${t[0]}')">${t[1]}</button>`).join('');tab('dj');
+const esc=s=>String(s).replace(/[<&>]/g,c=>({'<':'&lt;','&':'&amp;','>':'&gt;'}[c]));
+/* ===== PRO ===== */
+const PAY={stripe:[] /* [['💳 Karta 5 zł','https://buy.stripe.com/...'],...] — puste: Payment Links nie utworzone (konto Stripe bez aktywnych metod płatności) */};
+const PRO={pub:'BA6xymgoAHBLGn5v8Ey_WIccHk9nuEzab5sQ_R2n6mCcSeHSjbpUaglGFdSF24S-PMczb3Hm5lATI2yiVR0bKDs',on:false,
+ FREE_PACKS:['techno-peak','house','boom-bap'],FREE_VIZ:['bars','wave','particles','dragon','tunnel'],lastPack:'techno-peak',
+ order(){let o=localStorage.getItem('dj777.order');if(!o){const A='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';o='DX-'+Array.from(crypto.getRandomValues(new Uint8Array(6)),b=>A[b%A.length]).join('');localStorage.setItem('dj777.order',o)}return o},
+ ub(s){s=s.replace(/-/g,'+').replace(/_/g,'/');s+='='.repeat((4-s.length%4)%4);return Uint8Array.from(atob(s),c=>c.charCodeAt(0))},
+ async verify(key){const m=String(key||'').trim().match(/^PRO\.(DX-[A-Z0-9]{6,12})\.([A-Za-z0-9_-]{80,90})$/);if(!m||!crypto.subtle)return false;
+  try{const k=await crypto.subtle.importKey('raw',this.ub(this.pub),{name:'ECDSA',namedCurve:'P-256'},false,['verify']);return await crypto.subtle.verify({name:'ECDSA',hash:'SHA-256'},k,this.ub(m[2]),new TextEncoder().encode('DJ777SI-PRO|'+m[1]))}catch(e){return false}},
+ async init(){const k=localStorage.getItem('dj777.key');this.on=!!(k&&await this.verify(k));this.apply()},
+ async activate(k){if(await this.verify(k)){localStorage.setItem('dj777.key',k.trim());this.on=true;this.apply();return '💎 PRO aktywne — dziękuję! Wszystkie funkcje odblokowane.'}return '❌ Nieprawidłowy klucz (sprawdź, czy wkleiłeś całość).'},
+ need(f){if(this.on)return true;pro_msg.textContent='🔒 '+f+' — funkcja PRO (5 zł / 1 € / 1 $). Kupisz poniżej.';tab('pro');return false},
+ apply(){const o=this.order(),ttl=BRAND.name+' PRO '+o;ord.textContent=o;ttl_.textContent=ttl;
+  prowa.href='https://wa.me/48730377357?text='+encodeURIComponent(`Cześć Daniel! Kupuję ${BRAND.name} PRO. Numer zamówienia: ${o}. Zapłaciłem BLIK / przelewem (tytuł: ${ttl}). Proszę o klucz PRO 🙏`);
+  cards.innerHTML=PAY.stripe.length?PAY.stripe.map(s=>`<a class="wa" style="background:#635bff;color:#fff;box-shadow:0 0 14px #635bff" href="${s[1]}" target="_blank">${s[0]}</a>`).join(''):'<span style="color:#888">💳 Płatność kartą (Stripe) — wkrótce. Teraz: BLIK lub przelew.</span>';
+  prost.innerHTML=this.on?`💎 <b style="color:#0f8">PRO aktywne</b> · ${esc(localStorage.getItem('dj777.key').split('.')[1])}`:`🆓 <b>FREE</b> — zamówienie ${o}`;paybox.style.display=this.on?'none':'block';
+  protab.innerHTML='<tr><td></td><td><b>FREE</b></td><td><b>PRO</b></td></tr>'+[['Decki','1–2','wszystkie 10'],['Paczki padów','3 (techno peak, house, boom-bap)','16 (techno, 2000s, hip-hop, trap, drill, psy, dnb…)'],['Auto Set','utwory z darmowych paczek','utwory + sety ze zmianą BPM'],['Vizualizer','spektrum, fala, cząsteczki, smok, tunel','+ MilkDrop, shader WebGL, 3D, kalejdoskop, koło, pierścienie'],['Builder','HTML','HTML + PWA .zip'],['Mózg AI, Radio, Chat SI, DXF, Agenci, WAV','✅','✅']].map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td></tr>`).join('');
+  decks.forEach(d=>d.el.classList.toggle('locked',!this.on&&d.i>=2));
+  [...pk.options,...as_pk.options].forEach(op=>{if(!op.hasAttribute('value'))op.setAttribute('value',op.value);const f=this.on||this.FREE_PACKS.includes(op.value);op.textContent=op.value+(f?'':' 🔒')});
+  [...sv_m.options].forEach(op=>{const f=this.on||this.FREE_VIZ.includes(op.value);op.textContent=SV.modes.find(m=>m[0]==op.value)[1]+(f?'':' 🔒')});
+  if(!this.on&&!this.FREE_VIZ.includes(SV.mode))_svset('dragon');if(!this.on&&!this.FREE_PACKS.includes(pk.value)){pk.value='techno-peak';_pbuild()}
+  document.querySelectorAll('.probadge').forEach(e=>e.textContent=this.on?'💎 PRO':'🆓 FREE')}};
+const ttl_=document.getElementById('ttl');
+const _dstart=Deck.prototype.start;Deck.prototype.start=function(){if(!PRO.on&&this.i>=2){PRO.need('Deck '+(this.i+1));return}return _dstart.call(this)};
+const _am=B.autoMix.bind(B);B.autoMix=function(on){if(PRO.on||!on)return _am(on);clearInterval(this.mix);ac();let a=decks[1].play&&!decks[0].play?decks[1]:decks[0];a.start();
+ const go=()=>{const b=decks[a.i?0:1],bars=+xlen.value;b.setStyle(Object.keys(STY)[Math.floor(Math.random()*6)]);b.setBpm(a.bpm);b.setVol(0);b.start();const dur=bars*4*60/a.bpm*1000,st=Date.now(),A=a;aist.textContent=`Miksuję deck ${A.i+1} → deck ${b.i+1} (FREE: 2 decki)`;
+  const iv=setInterval(()=>{const x=Math.min(1,(Date.now()-st)/dur);A.setVol(.8*Math.cos(x*Math.PI/2));b.setVol(.8*Math.sin(x*Math.PI/2));if(x>=1){clearInterval(iv);A.stop();A.setVol(.8)}},100);a=b};
+ go();this.mix=setInterval(go,(+xlen.value*4*60/a.bpm*1000)+16000);return '🤖 Auto Mix włączony (FREE: decki 1–2, PRO: wszystkie 10).'};
+const _pbuild=P.build.bind(P);P.build=function(){if(!PRO.on&&!PRO.FREE_PACKS.includes(pk.value)){PRO.need('Paczka '+pk.value);pk.value=PRO.lastPack}PRO.lastPack=pk.value;return _pbuild()};
+const _svset=SV.set.bind(SV);SV.set=function(m){if(!PRO.on&&!PRO.FREE_VIZ.includes(m)){PRO.need('Wizualizacja '+m);sv_m.value=this.mode;return '🔒 Ta wizualizacja jest w PRO.'}return _svset(m)};
+const _ast=AUTO.start.bind(AUTO);AUTO.start=function(l,lab){if(!PRO.on){if(l.length>1){PRO.need('Sety wielo-utworowe');return '🔒 Sety (łańcuch utworów ze zmianą BPM) są w PRO.'}if(!PRO.FREE_PACKS.includes(l[0])){PRO.need('Paczka '+l[0]);return '🔒 Paczka '+l[0]+' jest w PRO. FREE: '+PRO.FREE_PACKS.join(', ')}}return _ast(l,lab)};
+const _mm=MAI.make.bind(MAI);MAI.make=function(s){if(!PRO.on){const p=this.parse(s);if(/\bset\b/.test(s)){PRO.need('Sety');return '🔒 Sety są w PRO.'}if(p.pack&&!PRO.FREE_PACKS.includes(p.pack)){PRO.need('Paczka '+p.pack);return `🔒 Gatunek ${p.pack} jest w PRO. W FREE: ${PRO.FREE_PACKS.join(', ')}.`}if(!p.pack)s+=' '+['techno peak','house','boom bap'][Math.floor(Math.random()*3)]}return _mm(s)};
+const _bplay=B.play.bind(B);B.play=function(st,bpm,n){const d=n!=null?n:this.cur;if(!PRO.on&&d>=2){PRO.need('Deck '+(d+1));return '🔒 Deck '+(d+1)+' jest w PRO (FREE: decki 1–2).'}return _bplay(st,bpm,n)};
+const _bdl=BLD.dl.bind(BLD);BLD.dl=function(k){if(k=='zip'&&!PRO.on){PRO.need('Builder PWA .zip');return '🔒 Eksport PWA .zip jest w PRO (HTML jest darmowy).'}return _bdl(k)};
+/* ===== Mózg AI (wllama, WASM, offline) ===== */
+const BRAIN={models:[{id:'smol135',name:'SmolLM2 135M Instruct',q:'Q4_K_M',url:'https://huggingface.co/bartowski/SmolLM2-135M-Instruct-GGUF/resolve/main/SmolLM2-135M-Instruct-Q4_K_M.gguf',size:105454432,lic:'Apache-2.0',note:'najmniejszy i najszybszy, słaby polski'},
+ {id:'smol360',name:'SmolLM2 360M Instruct',q:'Q4_K_M',url:'https://huggingface.co/bartowski/SmolLM2-360M-Instruct-GGUF/resolve/main/SmolLM2-360M-Instruct-Q4_K_M.gguf',size:270590880,lic:'Apache-2.0',note:'mały, trochę mądrzejszy'},
+ {id:'qwen05',name:'Qwen2.5 0.5B Instruct',q:'Q4_K_M',url:'https://huggingface.co/Qwen/Qwen2.5-0.5B-Instruct-GGUF/resolve/main/qwen2.5-0.5b-instruct-q4_k_m.gguf',size:491400032,lic:'Apache-2.0',note:'⭐ zalecany — najlepszy polski w małym rozmiarze'},
+ {id:'qwen15',name:'Qwen2.5 1.5B Instruct',q:'Q4_K_M',url:'https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct-GGUF/resolve/main/qwen2.5-1.5b-instruct-q4_k_m.gguf',size:1117320736,lic:'Apache-2.0',note:'najmądrzejszy, wymaga ≥4 GB RAM (PC / mocny telefon)'}],
+ wl:null,cur:null,busy:false,cached:{},hist:[],gpu:null,
+ fmt(b){return b>=1e9?(b/1e9).toFixed(2)+' GB':Math.round(b/1e6)+' MB'},
+ async lib(){if(!this.W)this.W=await import(new URL('brain/wllama.js',location.href).href);return this.W},
+ async inst(){const{Wllama}=await this.lib();if(!this.wl)this.wl=new Wllama({default:new URL('brain/wllama.wasm',location.href).href},{logger:{debug(){},log(){},warn:(...a)=>console.warn(...a),error:(...a)=>console.warn('wllama',...a)}});return this.wl},
+ async refresh(){try{const w=await this.inst();const l=await w.cacheManager.list();this.cached={};l.forEach(e=>{const m=this.models.find(m=>m.url==e.metadata.originalURL);if(m)this.cached[m.id]=e.size})}catch(e){}this.render()},
+ render(){bml.innerHTML=this.models.map(m=>`<div class="ag" style="border-color:${this.cur==m?'#0f8':'#0ff'}"><b>${m.name}</b> <span style="color:#f6f">${m.q}</span><br>📦 <b>${this.fmt(m.size)}</b> · ${m.lic}<br><span style="font-size:.85em">${m.note}</span><br>${this.cached[m.id]?'💾 w pamięci (offline)':'☁ do pobrania'}${this.cur==m?' · ✅ aktywny':''}<br>
+  <button onclick="BRAIN.load('${m.id}').then(r=>brst.textContent=r)">${this.cached[m.id]?'▶ Załaduj':'⬇ Pobierz '+this.fmt(m.size)}</button>${this.cached[m.id]?` <button onclick="BRAIN.del('${m.id}')">🗑</button>`:''} <a href="${m.url.replace('/resolve/','/blob/')}" target="_blank" style="color:#0ff;font-size:.8em">HF</a></div>`).join('')},
+ async sizes(){await Promise.all(this.models.map(async m=>{try{const r=await fetch(m.url,{method:'HEAD'});const n=+r.headers.get('content-length');if(n>1e6)m.size=n}catch(e){}}));this.render();return '📏 Rozmiary: '+this.models.map(m=>m.name+' '+this.fmt(m.size)).join(', ')},
+ async load(id){const m=this.models.find(x=>x.id==id||x.name.toLowerCase().includes(id));if(!m)return 'Nieznany model.';if(this.busy)return 'Trwa ładowanie…';this.busy=true;
+  try{const w=await this.inst();if(w.isModelLoaded())await w.exit().catch(()=>{}),this.wl=null;const w2=await this.inst();const t0=Date.now();
+   await w2.loadModelFromUrl(m.url,{n_ctx:2048,progressCallback:({loaded,total})=>{brst.textContent=`⬇ ${m.name}: ${(loaded/total*100).toFixed(1)}% (${this.fmt(loaded)} / ${this.fmt(total)})`}});
+   this.cur=m;this.gpu=null;this.hist=[];bmode.checked=true;await this.refresh();B.status('🧠 '+m.name);return `✅ Mózg AI: ${m.name} załadowany (${((Date.now()-t0)/1000).toFixed(0)} s). Zapisany w pamięci — działa offline.`}
+  catch(e){return '❌ Błąd ładowania: '+(e.message||e)}finally{this.busy=false}},
+ async del(id){const m=this.models.find(x=>x.id==id);try{const w=await this.inst();await w.cacheManager.delete(m.url)}catch(e){}await this.refresh();brst.textContent='🗑 Usunięto '+m.name},
+ async unload(){if(this.wl&&this.wl.isModelLoaded())await this.wl.exit();this.wl=null;this.cur=null;this.render();return '⏏ Model zwolniony z RAM.'},
+ ready(){return!!(this.gpu||(this.wl&&this.cur&&this.wl.isModelLoaded()))},
+ sys(){return `Jesteś "Mózg AI" w aplikacji ${BRAND.name} (DJ DaX, Kraków). Odpowiadasz krótko (1–3 zdania) i zawsze po polsku. Znasz się na DJ-ingu, techno, hip-hopie, BPM, tonacjach i produkcji muzyki. Komendy aplikacji: "graj techno 140", "zrób kawałek trap 140 g-moll", "radio rmf", "vizualizer smok".`},
+ async ask(q){if(!this.ready())return null;const msgs=[{role:'system',content:this.sys()},...this.hist.slice(-4),{role:'user',content:q}];let a;
+  if(this.gpu){const r=await this.gpu.chat.completions.create({messages:msgs,max_tokens:180,temperature:.7});a=r.choices[0].message.content}
+  else{const r=await this.wl.createChatCompletion({messages:msgs,max_tokens:180,temperature:.7,top_p:.9});a=r.choices[0].message.content}
+  a=(a||'').trim()||'…';this.hist.push({role:'user',content:q},{role:'assistant',content:a});return a},
+ async test(){const q=bq.value.trim()||'Jaki BPM ma techno?';if(!this.ready()){bans.textContent='Najpierw pobierz/załaduj model.';return}bans.textContent='🧠 myślę…';const t0=Date.now();const a=await this.ask(q);bans.textContent=a+`\n(${((Date.now()-t0)/1000).toFixed(1)} s · ${this.gpu?'WebLLM/WebGPU':this.cur.name})`;return a},
+ async webllm(){if(!navigator.gpu)return 'Brak WebGPU w tej przeglądarce.';brst.textContent='⚡ Ładuję WebLLM (z CDN, wymaga internetu przy 1. uruchomieniu)…';
+  try{const wl=await import('https://esm.run/@mlc-ai/web-llm');this.gpu=await wl.CreateMLCEngine('Qwen2.5-0.5B-Instruct-q4f16_1-MLC',{initProgressCallback:p=>brst.textContent='⚡ WebLLM: '+p.text});this.cur={name:'Qwen2.5 0.5B (WebLLM/WebGPU)'};bmode.checked=true;brst.textContent='✅ WebLLM/WebGPU gotowy';return 'WebLLM gotowy'}catch(e){brst.textContent='❌ WebLLM: '+e.message;return 'WebLLM błąd'}}};
+if(navigator.gpu)bgpu.style.display='';BRAIN.render();setTimeout(()=>BRAIN.refresh(),1500);
+/* Chat SI: Mózg AI mode */
+const cm=document.createElement('label');cm.style.cssText='display:block;font-size:.8em;margin-top:6px';cm.innerHTML='<input type="checkbox" onchange="bmode.checked=this.checked" id="bmode2"> 🧠 Mózg AI (lokalny model) — <a href="#" onclick="tab(\'brain\');return false" style="color:#0ff">pobierz/wybierz model</a>';document.getElementById('in').parentElement.after(cm);
+bmode.onchange=()=>bmode2.checked=bmode.checked;setInterval(()=>{bmode2.checked=bmode.checked},1000);
+const FALLBACK=/Nie zrozumiałem|Nie do końca rozumiem/;
+send=async function(){const i=document.getElementById('in'),v=i.value.trim();if(!v)return;say('u',v);i.value='';const r=brain(v);
+ if(FALLBACK.test(r)&&bmode.checked){if(BRAIN.ready()){say('b','🧠 myślę…');const el=chat.lastChild;try{const a=await BRAIN.ask(v);el.innerHTML='🧠 Mózg AI: '+esc(a)}catch(e){el.innerHTML='🐉 SI: '+r+' (Mózg AI błąd: '+esc(e.message)+')'}return}
+  setTimeout(()=>say('b',r+' 🧠 (Mózg AI nie jest załadowany — zakładka 🧠 Mózg AI)'),200);return}
+ setTimeout(()=>say('b',r),200)};
+/* chat SI v5 commands */
+const _b4=brain;brain=function(q){const s=q.toLowerCase();
+ if(/^m[oó]zg|^brain/.test(s)){tab('brain');if(/status/.test(s))return BRAIN.ready()?'🧠 Aktywny: '+BRAIN.cur.name:'🧠 Brak modelu. Rozmiary: '+BRAIN.models.map(m=>m.name+' '+BRAIN.fmt(m.size)).join(', ');
+  if(/off|wy[lł]/.test(s)){bmode.checked=false;return '🧠 Tryb Mózg AI wyłączony.'}if(/\bon\b|w[lł][aą]cz/.test(s)&&!/za[lł]aduj|pobierz/.test(s)){bmode.checked=true;return '🧠 Tryb Mózg AI włączony.'}
+  const id=/1\.5|15/.test(s)?'qwen15':/qwen|0\.5|05/.test(s)?'qwen05':/360/.test(s)?'smol360':/smol|135|ma[lł]y/.test(s)?'smol135':null;if(id){BRAIN.load(id).then(r=>{brst.textContent=r;say('b',r)});return '🧠 Ładuję '+BRAIN.models.find(m=>m.id==id).name+' ('+BRAIN.fmt(BRAIN.models.find(m=>m.id==id).size)+')…'}
+  return '🧠 Mózg AI: wybierz model — "mózg qwen" (491 MB, zalecany), "mózg smol" (105 MB), "mózg 360", "mózg 1.5". Potem "mózg on".'}
+ if(/^pro\b|kup pro|\bpro\?|cena pro|licencj/.test(s)){tab('pro');return PRO.on?'💎 Masz PRO.':`💎 PRO: 5 zł / 1 € / 1 $. BLIK 730 377 357 lub przelew Nest Bank PL45 1870 1045 2083 1058 7576 0001 (Daniel Dydo), tytuł: ${BRAND.name} PRO ${PRO.order()}. Potem WhatsApp → dostaniesz klucz.`}
+ if(!PRO.on&&/pady|paczk|pack|sample/.test(s)){const p=findPack(s);if(p&&!PRO.FREE_PACKS.includes(p)){PRO.need('Paczka '+p);return '🔒 Paczka '+p+' jest w PRO. FREE: '+PRO.FREE_PACKS.join(', ')}}
+ const k=q.match(/PRO\.DX-[A-Z0-9]{6,12}\.[A-Za-z0-9_-]{80,90}/);if(k){PRO.activate(k[0]).then(r=>say('b',r));return '🔑 Sprawdzam klucz…'}
+ if(/pobier|download|apk/.test(s)&&/darm|free|hub|wszystk/.test(s)){window.open('downloads.html','_blank');return '📦 Darmowe pobieranie: downloads.html'}
+ const r=_b4(q);return /pomoc|help|komend/.test(s)?r+' · v5: mózg qwen / mózg smol / mózg on / mózg off / mózg status · pro · kup pro · (wklej klucz PRO.DX-…) · darmowe pobieranie':r};
+/* brand */
+document.querySelector('.sub').insertAdjacentHTML('beforeend',' · <span class="probadge" style="color:#ff0;cursor:pointer" onclick="tab(\'pro\')"></span>');
+PRO.init();
 </script>
 </body></html>
