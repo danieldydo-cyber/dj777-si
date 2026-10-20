@@ -1,80 +1,132 @@
-<!DOCTYPE html><html lang="pl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>DJ 777 SI</title>
+<!DOCTYPE html><html lang="pl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>DJ 777 SI v2.0</title>
 <style>
 body{margin:0;background:#07020f;color:#e8f;font-family:system-ui,sans-serif}
-h1{text-align:center;margin:10px;font-size:2em;color:#0ff;text-shadow:0 0 10px #0ff,0 0 25px #f0f;letter-spacing:4px}
-.sub{text-align:center;color:#f6f;margin-top:-6px}
-nav{display:flex;gap:6px;justify-content:center;margin:10px}
-button{background:#14002a;color:#0ff;border:1px solid #0ff;border-radius:8px;padding:8px 12px;box-shadow:0 0 8px #0ff6;font-weight:bold}
-button.on{background:#0ff;color:#000}
+#splash{position:fixed;inset:0;background:radial-gradient(#3a0060,#000);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9;transition:opacity 1s}
+#splash .d{font-size:110px;animation:fl 1.5s infinite alternate;filter:drop-shadow(0 0 25px #f0f)}@keyframes fl{to{transform:translateY(-15px) scale(1.08);filter:drop-shadow(0 0 45px #0ff)}}
+#splash h1{color:#0ff;text-shadow:0 0 15px #0ff,0 0 30px #f0f;letter-spacing:6px}
+h1{text-align:center;margin:8px;color:#0ff;text-shadow:0 0 10px #0ff,0 0 25px #f0f;letter-spacing:4px}.sub{text-align:center;color:#f6f;margin-top:-6px;font-size:.9em}
+nav{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;margin:8px}
+button{background:#14002a;color:#0ff;border:1px solid #0ff;border-radius:8px;padding:7px 10px;box-shadow:0 0 8px #0ff6;font-weight:bold}button.on{background:#0ff;color:#000}
 .p{display:none;padding:8px}.p.act{display:block}
-.decks{display:flex;flex-wrap:wrap;gap:10px}.deck{flex:1;min-width:260px;border:1px solid #f0f;border-radius:12px;padding:10px;box-shadow:0 0 14px #f0f5;background:#120022}
-.deck h2{margin:4px 0;color:#f0f}label{display:block;font-size:.85em;margin-top:6px}input[type=range]{width:100%;accent-color:#0ff}
-.row{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}select{background:#14002a;color:#0ff;border:1px solid #0ff}
-.xf{margin:12px 0;text-align:center;border:1px solid #0ff;border-radius:12px;padding:10px}
-#chat{height:260px;overflow:auto;border:1px solid #0ff;border-radius:10px;padding:8px;background:#0a0018}
-.m{margin:4px 0}.u{color:#ff0}.b{color:#0f8}
-#in{width:70%;padding:8px;background:#14002a;color:#fff;border:1px solid #f0f;border-radius:8px}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:6px;margin-top:10px}
-.ag{border:1px solid #0f8;border-radius:8px;padding:6px;font-size:.85em;background:#001a10}.ag i{color:#0f8;font-style:normal}
-.wa{display:block;text-align:center;margin:14px auto;width:80%;background:#25D366;color:#000;padding:14px;border-radius:30px;font-weight:bold;text-decoration:none;box-shadow:0 0 18px #25D366}
+.decks{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:8px}
+.deck{border:1px solid #f0f;border-radius:12px;padding:8px;box-shadow:0 0 12px #f0f5;background:#120022}.deck.live{border-color:#0f8;box-shadow:0 0 18px #0f8}
+.deck h3{margin:2px 0;color:#f0f}label{display:block;font-size:.78em;margin-top:4px}input[type=range]{width:100%;accent-color:#0ff}
+.row{display:flex;flex-wrap:wrap;gap:4px;margin-top:5px}select{background:#14002a;color:#0ff;border:1px solid #0ff}
+.box{margin:10px 0;border:1px solid #0ff;border-radius:12px;padding:10px;background:#0a0018}
+#chat{height:300px;overflow:auto}.m{margin:4px 0}.u{color:#ff0}.b{color:#0f8}
+#in{flex:1;padding:8px;background:#14002a;color:#fff;border:1px solid #f0f;border-radius:8px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:6px}
+.ag{border:1px solid #0f8;border-radius:8px;padding:6px;font-size:.8em;background:#001a10}.ag i{color:#0f8;font-style:normal}
+.wa{display:block;text-align:center;margin:12px auto;width:80%;background:#25D366;color:#000;padding:13px;border-radius:30px;font-weight:bold;text-decoration:none;box-shadow:0 0 18px #25D366}
+#brain{position:sticky;top:0;z-index:5;background:#0a0018ee;border-bottom:1px solid #f0f;padding:5px;font-size:.8em;text-align:center;color:#0ff}
+.steps{display:grid;grid-template-columns:repeat(16,1fr);gap:2px}.steps b{height:22px;background:#200040;border-radius:3px;cursor:pointer}.steps b.x{background:#f0f;box-shadow:0 0 6px #f0f}
 </style></head><body>
-<h1>DJ 777 SI</h1><div class="sub">DJ DaX · Kraków · Techno Neon</div>
-<a href="DJ-777-SI.apk" download style="display:block;text-align:center;margin:12px auto;width:80%;background:linear-gradient(90deg,#f0f,#0ff);color:#000;padding:14px;border-radius:30px;font-weight:bold;text-decoration:none;box-shadow:0 0 20px #f0f">⬇ Pobierz APK (Android)</a><nav><button class="on" onclick="tab(0,this)">🎛 DJ</button><button onclick="tab(1,this)">🤖 Chat bot SI</button><button onclick="tab(2,this)">📞 Kontakt</button></nav>
-<div class="p act" id="p0"><div class="decks" id="decks"></div>
-<div class="xf"><b>Crossfader</b> A ◀▶ B<input type="range" id="xf" min="0" max="1" step="0.01" value="0.5"></div></div>
-<div class="p" id="p1"><div id="chat"></div><div class="row"><input id="in" placeholder="Napisz do SI..."><button onclick="send()">Wyślij</button></div>
-<h3 style="color:#0f8">777 agentów — status synchronizacji</h3><div class="grid" id="grid"></div></div>
-<div class="p" id="p2"><p style="text-align:center">Rezerwacje i współpraca z DJ DaX</p><a class="wa" href="https://wa.me/48730377357" target="_blank">💬 WhatsApp +48 730 377 357</a></div>
-<a class="wa" href="https://wa.me/48730377357" target="_blank">💬 Napisz na WhatsApp</a>
+<div id="splash"><div class="d">🐉</div><h1>DJ 777 SI</h1><div style="color:#f6f">SUPER AI · v2.0 · DJ DaX Kraków</div></div>
+<div id="brain">🧠 Mózg SI: <span id="bs">gotowy</span></div>
+<h1>🐉 DJ 777 SI</h1><div class="sub">SUPER AI v2.0 · DJ DaX · Kraków</div>
+<a href="DJ-777-SI.apk" download style="display:block;text-align:center;margin:10px auto;width:80%;background:linear-gradient(90deg,#f0f,#0ff);color:#000;padding:13px;border-radius:30px;font-weight:bold;text-decoration:none;box-shadow:0 0 20px #f0f">⬇ Pobierz APK v2.0 (Android)</a><nav id="nav"></nav>
+<div class="p" id="t-dj"><div class="box row"><b>Master</b> <input type="range" id="mv" min="0" max="1" step=".01" value=".8" style="width:150px"> <button onclick="B.stopAll()">⏹ STOP ALL</button></div><div class="decks" id="decks"></div></div>
+<div class="p" id="t-ai"><div class="box"><h3>🤖 AI DJ / Auto Mix</h3><p>SI sama wybiera decki, zgrywa BPM i płynnie miksuje co kilka taktów.</p>
+<div class="row"><button onclick="B.autoMix(true)">▶ Start Auto Mix</button><button onclick="B.autoMix(false)">⏹ Stop</button></div>
+<label>Długość przejścia (takty): <b id="xl">8</b></label><input type="range" id="xlen" min="2" max="32" value="8" oninput="xl.textContent=this.value"><div id="aist" style="color:#0f8;margin-top:6px"></div></div></div>
+<div class="p" id="t-gen"><div class="box"><h3>🎹 Generator loopów</h3><div class="row">Styl <select id="gs"></select> BPM <input id="gb" type="number" value="132" style="width:60px"> → Deck <select id="gd"></select><button onclick="B.generate()">⚡ Generuj</button></div>
+<p>Stopa (kliknij kroki):</p><div class="steps" id="sk"></div><p>Hi-hat:</p><div class="steps" id="sh"></div><p>Bas:</p><div class="steps" id="sb"></div></div></div>
+<div class="p" id="t-fx"><div class="box"><h3>🎚 FX (deck docelowy) <select id="fd"></select></h3>
+<div class="row"><button onclick="B.fx('echo')">Echo</button><button onclick="B.fx('filter')">Filtr sweep</button><button onclick="B.fx('scratch')">Scratch</button><button onclick="B.fx('stutter')">Stutter</button><button onclick="B.fx('brake')">Brake</button><button onclick="B.fx('riser')">Riser</button><button onclick="B.fx('off')">FX OFF</button></div></div></div>
+<div class="p" id="t-chat"><div class="box"><div id="chat"></div><div class="row"><input id="in" placeholder='np. "graj techno 140", "auto mix", "efekt echo"'><button onclick="send()">Wyślij</button></div>
+<div style="font-size:.75em;color:#aaa;margin-top:6px">Komendy: graj [techno|acid|minimal|hard|house|trance] [BPM] · stop · auto mix · stop mix · scratch · generuj loop · efekt echo/filtr/stutter/brake/riser · deck 3 · bpm 135 · głośniej/ciszej · status</div></div></div>
+<div class="p" id="t-ag"><h3 style="color:#0f8">777 agentów — wspólny mózg SI</h3><div class="grid" id="grid"></div></div>
+<div class="p" id="t-wa"><div class="box" style="text-align:center"><h3>Wsparcie / Booking DJ DaX</h3><p>Kraków · imprezy · kluby · wesela techno</p><a class="wa" href="https://wa.me/48730377357" target="_blank">💬 WhatsApp +48 730 377 357</a></div></div>
+<a class="wa" href="https://wa.me/48730377357" target="_blank">💬 WhatsApp DJ DaX</a>
 <script>
-function tab(i,b){document.querySelectorAll('.p').forEach((p,j)=>p.classList.toggle('act',i==j));document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('on',x==b))}
-let C,master;const decks=[];
-function ac(){if(!C){C=new (window.AudioContext||window.webkitAudioContext)();master=C.createGain();master.connect(C.destination);decks.forEach(d=>d.init())}if(C.state=='suspended')C.resume()}
-const STY={'Techno 4/4':{k:[1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0],h:[0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0],c:[0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0],bs:[0,0,1,0,0,0,1,1,0,0,1,0,0,0,1,0]},
-'Acid':{k:[1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,1],h:[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],c:[0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0],bs:[1,1,0,1,1,0,1,1,1,0,1,1,0,1,1,0]},
-'Minimal':{k:[1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0],h:[0,0,1,0,0,0,1,0,0,0,1,0,0,1,1,0],c:[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0],bs:[0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0]},
-'Hard Techno':{k:[1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,1],h:[0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1],c:[0,0,0,0,1,0,0,0,0,0,0,0,1,0,1,0],bs:[0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0]}};
-let noiseBuf;function noise(){if(!noiseBuf){noiseBuf=C.createBuffer(1,C.sampleRate,C.sampleRate);const d=noiseBuf.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1}return noiseBuf}
-class Deck{constructor(n,el,st,bpm){this.n=n;this.style=st;this.bpm=bpm;this.play=false;this.step=0;this.loop=0;this.loopStart=0;this.el=el;this.render()}
-init(){this.vol=C.createGain();this.flt=C.createBiquadFilter();this.flt.type='lowpass';this.flt.frequency.value=20000;this.dl=C.createDelay(2);this.fb=C.createGain();this.fb.gain.value=0;this.wet=C.createGain();this.wet.gain.value=0;
-this.xg=C.createGain();this.in=C.createGain();this.in.connect(this.flt);this.flt.connect(this.vol);this.flt.connect(this.dl);this.dl.connect(this.fb);this.fb.connect(this.dl);this.dl.connect(this.wet);this.wet.connect(this.vol);this.vol.connect(this.xg);this.xg.connect(master);this.upd();xfade()}
-upd(){if(!C)return;const q=s=>this.el.querySelector(s);this.vol.gain.value=+q('.v').value;this.flt.frequency.value=+q('.f').value;const e=+q('.e').value;this.wet.gain.value=e;this.fb.gain.value=e*.6;this.dl.delayTime.value=60/this.bpm*.75}
-render(){this.el.innerHTML=`<h2>DECK ${this.n}</h2><select class="s">${Object.keys(STY).map(k=>`<option ${k==this.style?'selected':''}>${k}</option>`).join('')}</select>
-<label>BPM: <b class="bv">${this.bpm}</b></label><input class="bpm" type="range" min="100" max="160" value="${this.bpm}">
-<label>Głośność</label><input class="v" type="range" min="0" max="1" step=".01" value=".8">
-<label>FX Filtr (LPF)</label><input class="f" type="range" min="200" max="20000" step="10" value="20000">
-<label>FX Echo</label><input class="e" type="range" min="0" max=".7" step=".01" value="0">
-<div class="row"><button class="pl">▶ PLAY</button><button data-l="1">Loop 1</button><button data-l="2">Loop 2</button><button data-l="4">Loop 4</button><button data-l="0">Loop OFF</button><button class="sy">SYNC</button></div><div class="st" style="font-size:.8em;margin-top:5px;color:#0ff"></div>`;
-const q=s=>this.el.querySelector(s);q('.s').onchange=e=>this.style=e.target.value;q('.bpm').oninput=e=>{this.bpm=+e.target.value;q('.bv').textContent=this.bpm;this.upd()};
-['.v','.f','.e'].forEach(s=>q(s).oninput=()=>this.upd());q('.pl').onclick=()=>{ac();this.play=!this.play;q('.pl').textContent=this.play?'⏸ STOP':'▶ PLAY';if(this.play){this.next=C.currentTime+.05;this.step=0}};
-this.el.querySelectorAll('[data-l]').forEach(b=>b.onclick=()=>{this.loop=+b.dataset.l;this.loopStart=this.step-(this.step%16);this.stat()});
-q('.sy').onclick=()=>{const o=decks[this.n=='A'?1:0];this.bpm=o.bpm;q('.bpm').value=this.bpm;q('.bv').textContent=this.bpm;this.upd()}}
-stat(){this.el.querySelector('.st').textContent=(this.play?'● GRA':'○ STOP')+' | krok '+(this.step%16+1)+'/16 | loop '+(this.loop?this.loop+' takt':'OFF')}
-sched(){if(!this.play||!this.in)return;const sp=60/this.bpm/4;while(this.next<C.currentTime+.12){this.hit(this.step%16,this.next);this.next+=sp;this.step++;
-if(this.loop){const len=this.loop*16;if(this.step>=this.loopStart+len)this.step=this.loopStart}}this.stat()}
-hit(i,t){const p=STY[this.style];if(p.k[i]){const o=C.createOscillator(),g=C.createGain();o.frequency.setValueAtTime(150,t);o.frequency.exponentialRampToValueAtTime(40,t+.15);g.gain.setValueAtTime(1,t);g.gain.exponentialRampToValueAtTime(.001,t+.3);o.connect(g);g.connect(this.in);o.start(t);o.stop(t+.3)}
-const nz=(dur,f,v,type)=>{const s=C.createBufferSource();s.buffer=noise();const fl=C.createBiquadFilter();fl.type=type;fl.frequency.value=f;const g=C.createGain();g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.001,t+dur);s.connect(fl);fl.connect(g);g.connect(this.in);s.start(t);s.stop(t+dur)};
+setTimeout(()=>{splash.style.opacity=0;setTimeout(()=>splash.remove(),1000)},2200);splash.onclick=()=>splash.remove();
+const TABS=[['dj','🎛 10 Decków'],['ai','🤖 AI DJ'],['gen','🎹 Generator'],['fx','🎚 FX'],['chat','💬 Chat SI'],['ag','🐉 777 Agentów'],['wa','📞 Wsparcie']];
+function tab(id){document.querySelectorAll('.p').forEach(p=>p.classList.toggle('act',p.id=='t-'+id));document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.t==id))}
+nav.innerHTML=TABS.map(t=>`<button data-t="${t[0]}" onclick="tab('${t[0]}')">${t[1]}</button>`).join('');tab('dj');
+const R=s=>Array.from({length:16},(_,i)=>s.includes(i)?1:0);
+const STY={techno:{k:R([0,4,8,12]),h:R([2,6,10,14]),c:R([4,12]),bs:R([2,6,7,10,14]),bpm:130},acid:{k:R([0,4,8,12,15]),h:R([...Array(16).keys()]),c:R([4,12]),bs:R([0,1,3,4,6,7,8,10,11,13,14]),bpm:132,q:15},
+minimal:{k:R([0,4,8,12]),h:R([2,6,10,13,14]),c:R([12]),bs:R([6,14]),bpm:125},hard:{k:R([0,2,4,6,8,10,12,14,15]),h:R([1,3,5,7,9,11,13,15]),c:R([4,12,14]),bs:R([1,2,5,6,9,10,13,14]),bpm:148},
+house:{k:R([0,4,8,12]),h:R([2,6,10,14]),c:R([4,12]),bs:R([0,3,6,10,11]),bpm:124},trance:{k:R([0,4,8,12]),h:R([2,6,10,14]),c:R([4,12]),bs:R([...Array(16).keys()].filter(i=>i%2)),bpm:138}};
+let C,master,nb;const decks=[];
+function ac(){if(!C){C=new (window.AudioContext||window.webkitAudioContext)();master=C.createGain();master.gain.value=+mv.value;master.connect(C.destination);decks.forEach(d=>d.init())}if(C.state=='suspended')C.resume()}
+mv.oninput=()=>master&&(master.gain.value=+mv.value);
+function noise(){if(!nb){nb=C.createBuffer(1,C.sampleRate,C.sampleRate);const d=nb.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1}return nb}
+class Deck{constructor(i,el){this.i=i;this.el=el;const k=Object.keys(STY)[i%6];this.style=k;this.pat=JSON.parse(JSON.stringify(STY[k]));this.bpm=STY[k].bpm;this.play=false;this.step=0;this.loop=0;this.ls=0;this.rate=1;this.render()}
+init(){if(this.in)return;this.in=C.createGain();this.flt=C.createBiquadFilter();this.flt.type='lowpass';this.flt.frequency.value=20000;this.vol=C.createGain();this.dl=C.createDelay(2);this.fb=C.createGain();this.fb.gain.value=0;this.wet=C.createGain();this.wet.gain.value=0;
+this.in.connect(this.flt);this.flt.connect(this.vol);this.flt.connect(this.dl);this.dl.connect(this.fb);this.fb.connect(this.dl);this.dl.connect(this.wet);this.wet.connect(this.vol);this.vol.connect(master);this.upd()}
+q(s){return this.el.querySelector(s)}
+upd(){if(!this.in)return;this.vol.gain.value=+this.q('.v').value;this.flt.frequency.value=+this.q('.f').value;const e=+this.q('.e').value;this.wet.gain.value=e;this.fb.gain.value=e*.6;this.dl.delayTime.value=60/this.bpm*.75}
+setBpm(b){this.bpm=Math.max(80,Math.min(180,b));this.q('.bpm').value=this.bpm;this.q('.bv').textContent=this.bpm;this.upd()}
+setStyle(s){this.style=s;this.pat=JSON.parse(JSON.stringify(STY[s]));this.q('.s').value=s}
+setVol(v){this.q('.v').value=v;this.upd()}
+start(){ac();this.init();if(!this.play){this.play=true;this.next=C.currentTime+.05;this.step=0}this.q('.pl').textContent='⏸';this.el.classList.add('live')}
+stop(){this.play=false;this.q('.pl').textContent='▶';this.el.classList.remove('live')}
+render(){this.el.innerHTML=`<h3>DECK ${this.i+1}</h3><select class="s">${Object.keys(STY).map(k=>`<option ${k==this.style?'selected':''}>${k}</option>`).join('')}</select> BPM <b class="bv">${this.bpm}</b>
+<input class="bpm" type="range" min="80" max="180" value="${this.bpm}"><label>Głośność</label><input class="v" type="range" min="0" max="1" step=".01" value=".8">
+<label>Filtr</label><input class="f" type="range" min="200" max="20000" step="10" value="20000"><label>Echo</label><input class="e" type="range" min="0" max=".7" step=".01" value="0">
+<div class="row"><button class="pl">▶</button><button data-l="1">L1</button><button data-l="2">L2</button><button data-l="4">L4</button><button data-l="0">Loff</button><button class="sy">SYNC</button></div><div class="st" style="font-size:.72em;color:#0ff"></div>`;
+this.q('.s').onchange=e=>this.setStyle(e.target.value);this.q('.bpm').oninput=e=>this.setBpm(+e.target.value);['.v','.f','.e'].forEach(s=>this.q(s).oninput=()=>this.upd());
+this.q('.pl').onclick=()=>this.play?this.stop():this.start();this.el.querySelectorAll('[data-l]').forEach(b=>b.onclick=()=>{this.loop=+b.dataset.l;this.ls=this.step-this.step%16});
+this.q('.sy').onclick=()=>{const m=decks.find(d=>d.play&&d!=this);if(m)this.setBpm(m.bpm)}}
+sched(){if(!this.play||!this.in)return;const sp=60/this.bpm/4/this.rate;while(this.next<C.currentTime+.12){this.hit(this.step%16,this.next);this.next+=sp;this.step++;if(this.loop&&this.step>=this.ls+this.loop*16)this.step=this.ls}
+this.q('.st').textContent=(this.play?'● GRA':'○')+' krok '+(this.step%16+1)+(this.loop?' · loop '+this.loop:'')}
+hit(i,t){const p=this.pat,o0=this.in;if(p.k[i]){const o=C.createOscillator(),g=C.createGain();o.frequency.setValueAtTime(150,t);o.frequency.exponentialRampToValueAtTime(40,t+.15);g.gain.setValueAtTime(1,t);g.gain.exponentialRampToValueAtTime(.001,t+.3);o.connect(g);g.connect(o0);o.start(t);o.stop(t+.3)}
+const nz=(d,f,v,ty)=>{const s=C.createBufferSource();s.buffer=noise();const fl=C.createBiquadFilter();fl.type=ty;fl.frequency.value=f;const g=C.createGain();g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.001,t+d);s.connect(fl);fl.connect(g);g.connect(o0);s.start(t);s.stop(t+d)};
 if(p.h[i])nz(.05,8000,.3,'highpass');if(p.c[i])nz(.2,1500,.5,'bandpass');
-if(p.bs[i]){const o=C.createOscillator(),f=C.createBiquadFilter(),g=C.createGain();o.type='sawtooth';o.frequency.value=[55,55,65.4,49][Math.floor(this.step/16)%4];f.type='lowpass';f.Q.value=this.style=='Acid'?15:4;f.frequency.setValueAtTime(this.style=='Acid'?1800:600,t);f.frequency.exponentialRampToValueAtTime(120,t+.15);g.gain.setValueAtTime(.35,t);g.gain.exponentialRampToValueAtTime(.001,t+.18);o.connect(f);f.connect(g);g.connect(this.in);o.start(t);o.stop(t+.2)}}}
-const dz=document.getElementById('decks');['A','B'].forEach((n,i)=>{const e=document.createElement('div');e.className='deck';dz.appendChild(e);decks.push(new Deck(n,e,i?'Acid':'Techno 4/4',i?130:128))});
-function xfade(){const x=+document.getElementById('xf').value;if(decks[0].xg){decks[0].xg.gain.value=Math.cos(x*Math.PI/2);decks[1].xg.gain.value=Math.sin(x*Math.PI/2)}}
-document.getElementById('xf').oninput=xfade;setInterval(()=>decks.forEach(d=>d.sched()),25);
-const AG=['SuperGeox','DargonMoon','SuperBotD','Universal','SuperGrok','D','Dragon','Super APK Builder','D7 Music AI','SuperG','Diabel7','Kali Radio','SuperStarG','SuperGall','MC707 Companion','Command Center'];
-const st=['online','sync ✓','aktywny','miksuje','buduje APK'];const gr=document.getElementById('grid');
-function grid(){gr.innerHTML=AG.map((a,i)=>`<div class="ag">🤖 <b>${a}</b><br><i>● ${st[(i+Math.floor(Date.now()/4000))%st.length]}</i> · 777</div>`).join('')}grid();setInterval(grid,4000);
-const ch=document.getElementById('chat');function say(c,t){ch.innerHTML+=`<div class="m ${c}">${c=='u'?'Ty':'SI'}: ${t}</div>`;ch.scrollTop=1e9}
-function reply(q){q=q.toLowerCase();
-if(/cze|hej|siema|witaj|elo/.test(q))return'Siema! Jestem SI DJ-a DaX. W czym pomóc — beaty, BPM, booking?';
-if(/bpm|tempo/.test(q))return'Techno najlepiej brzmi w 125–135 BPM. Hard techno: 140–150. Użyj SYNC, żeby zgrać decki.';
-if(/loop|pętl/.test(q))return'Kliknij Loop 1/2/4 na decku, by zapętlić takty. Loop OFF wyłącza pętlę.';
-if(/fx|efekt|filtr|echo/.test(q))return'Masz filtr LPF i echo na każdym decku. Zjedź filtrem w dół przed dropem!';
-if(/mix|miks|crossfad/.test(q))return'Odpal oba decki, zgraj BPM przez SYNC i płynnie przesuwaj crossfader.';
-if(/whatsapp|kontakt|booking|rezerw|telefon/.test(q))return'Booking DJ DaX: WhatsApp +48 730 377 357 (przycisk na dole).';
-if(/krak/.test(q))return'Kraków — stolica polskiego techno! DJ DaX gra w klubach w całym mieście.';
-if(/agent|bot|777/.test(q))return'Sieć 777 agentów: '+AG.slice(0,8).join(', ')+' — wszystkie zsynchronizowane.';
-if(/kim|kto/.test(q))return'Jestem lokalnym asystentem SI aplikacji DJ 777 SI. Działam offline.';
-if(/dzięk|dzieki/.test(q))return'Nie ma sprawy! Głośno i do rana 🔊';
-return'Nie do końca rozumiem. Zapytaj o BPM, loopy, FX, miks albo booking.'}
-function send(){const i=document.getElementById('in');if(!i.value.trim())return;say('u',i.value);const r=reply(i.value);i.value='';setTimeout(()=>say('b',r),300)}
-document.getElementById('in').onkeydown=e=>{if(e.key=='Enter')send()};say('b','Cześć! Jestem SI DJ 777. Zapytaj mnie o cokolwiek o techno.');
+if(p.bs[i]){const o=C.createOscillator(),f=C.createBiquadFilter(),g=C.createGain();o.type='sawtooth';o.frequency.value=[55,55,65.4,49][Math.floor(this.step/16)%4];f.type='lowpass';f.Q.value=p.q||4;f.frequency.setValueAtTime(p.q?1800:600,t);f.frequency.exponentialRampToValueAtTime(120,t+.15);g.gain.setValueAtTime(.35,t);g.gain.exponentialRampToValueAtTime(.001,t+.18);o.connect(f);f.connect(g);g.connect(o0);o.start(t);o.stop(t+.2)}}}
+for(let i=0;i<10;i++){const e=document.createElement('div');e.className='deck';document.getElementById('decks').appendChild(e);decks.push(new Deck(i,e))}
+setInterval(()=>decks.forEach(d=>d.sched()),25);
+const opts=Array.from({length:10},(_,i)=>`<option value="${i}">${i+1}</option>`).join('');gd.innerHTML=opts;fd.innerHTML=opts;gs.innerHTML=Object.keys(STY).map(k=>`<option>${k}</option>`).join('');
+const gp={k:STY.techno.k.slice(),h:STY.techno.h.slice(),bs:STY.techno.bs.slice()};
+function drawSteps(){[['sk','k'],['sh','h'],['sb','bs']].forEach(([id,key])=>{const el=document.getElementById(id);el.innerHTML=gp[key].map((v,i)=>`<b class="${v?'x':''}" onclick="gp.${key}[${i}]^=1;drawSteps()"></b>`).join('')})}drawSteps();
+/* ===== SHARED AI BRAIN ===== */
+const B={cur:0,mix:null,
+ status(t){bs.textContent=t},
+ deck(n){if(n!=null)this.cur=Math.max(0,Math.min(9,n));fd.value=gd.value=this.cur;return decks[this.cur]},
+ play(style,bpm,n){const d=this.deck(n);if(style)d.setStyle(style);if(bpm)d.setBpm(bpm);d.start();tab('dj');this.status(`Deck ${d.i+1}: ${d.style} ${d.bpm} BPM`);return `▶ Gram ${d.style} ${d.bpm} BPM na decku ${d.i+1}.`},
+ stopAll(){decks.forEach(d=>d.stop());this.autoMix(false);this.status('cisza');return '⏹ Zatrzymałem wszystkie decki.'},
+ generate(style,bpm){ac();const s=style||gs.value,b=bpm||+gb.value||STY[s].bpm,d=this.deck(+gd.value);
+  ['k','h','bs'].forEach(k=>gp[k]=STY[s][k].map(v=>Math.random()<.18?1-v:v));gp.k[0]=1;drawSteps();
+  d.setStyle(s);d.pat.k=gp.k.slice();d.pat.h=gp.h.slice();d.pat.bs=gp.bs.slice();d.setBpm(b);d.start();this.status(`Wygenerowano loop ${s} ${b} BPM → deck ${d.i+1}`);return `⚡ Wygenerowałem nowy loop ${s} ${b} BPM i odpaliłem na decku ${d.i+1}.`},
+ fx(type,n){ac();const d=this.deck(n!=null?n:+fd.value);d.init();const t=C.currentTime;
+  if(type=='echo'){d.q('.e').value=.5;d.upd()}
+  else if(type=='filter'){d.flt.frequency.cancelScheduledValues(t);d.flt.frequency.setValueAtTime(20000,t);d.flt.frequency.exponentialRampToValueAtTime(300,t+2);d.flt.frequency.exponentialRampToValueAtTime(20000,t+4)}
+  else if(type=='scratch'){for(let i=0;i<6;i++){const s=C.createBufferSource();s.buffer=noise();s.playbackRate.setValueAtTime(i%2?.4:2.2,t+i*.09);const f=C.createBiquadFilter();f.type='bandpass';f.frequency.setValueAtTime(i%2?400:2500,t+i*.09);f.frequency.linearRampToValueAtTime(i%2?2500:400,t+i*.09+.08);const g=C.createGain();g.gain.setValueAtTime(.6,t+i*.09);g.gain.exponentialRampToValueAtTime(.001,t+i*.09+.085);s.connect(f);f.connect(g);g.connect(master);s.start(t+i*.09);s.stop(t+i*.09+.09)}}
+  else if(type=='stutter'){d.rate=2;d.loop=1;d.ls=d.step-d.step%16;setTimeout(()=>{d.rate=1;d.loop=0},2000)}
+  else if(type=='brake'){d.vol.gain.setValueAtTime(d.vol.gain.value,t);d.vol.gain.linearRampToValueAtTime(0,t+1.5);setTimeout(()=>{d.stop();d.upd()},1600)}
+  else if(type=='riser'){const s=C.createBufferSource();s.buffer=noise();s.loop=true;const f=C.createBiquadFilter();f.type='bandpass';f.Q.value=8;f.frequency.setValueAtTime(300,t);f.frequency.exponentialRampToValueAtTime(9000,t+4);const g=C.createGain();g.gain.setValueAtTime(.01,t);g.gain.linearRampToValueAtTime(.4,t+4);g.gain.linearRampToValueAtTime(0,t+4.1);s.connect(f);f.connect(g);g.connect(master);s.start(t);s.stop(t+4.2)}
+  else {d.q('.e').value=0;d.q('.f').value=20000;d.rate=1;d.upd()}
+  this.status(`FX ${type} → deck ${d.i+1}`);return `🎚 Efekt ${type} na decku ${d.i+1}.`},
+ autoMix(on){clearInterval(this.mix);this.mix=null;if(!on){aist.textContent='Auto Mix wyłączony';return '⏹ Auto Mix zatrzymany.'}
+  ac();let a=decks.find(d=>d.play)||decks[0];a.start();const go=()=>{const bars=+xlen.value,b=decks[(a.i+1+Math.floor(Math.random()*3))%10];b.setStyle(Object.keys(STY)[Math.floor(Math.random()*6)]);b.setBpm(a.bpm+Math.round(Math.random()*4-2));b.setVol(0);b.start();
+   const dur=bars*4*60/a.bpm*1000,st=Date.now(),A=a;aist.textContent=`Miksuję deck ${A.i+1} → deck ${b.i+1} (${b.style}, ${bars} taktów)`;this.status(aist.textContent);
+   const iv=setInterval(()=>{const x=Math.min(1,(Date.now()-st)/dur);A.setVol(.8*Math.cos(x*Math.PI/2));b.setVol(.8*Math.sin(x*Math.PI/2));if(x>=1){clearInterval(iv);A.stop();A.setVol(.8)}},100);a=b};
+  go();this.mix=setInterval(go,(+xlen.value*4*60/a.bpm*1000)+16000);return '🤖 Auto Mix włączony — SI sama prowadzi seta przez 10 decków.'}};
+/* ===== CHAT SI (Polish NLU → brain) ===== */
+const AG=['SuperGeox','DargonMoon','SuperBotD','Universal','SuperGrok','D','Dragon','Super APK Builder','D7 Music AI','SuperG','Diabel7','Kali Radio','SuperStarG','SuperGall','MC707 Companion','Command Center','AutoMix Agent','FX Agent','Generator Agent','Chat SI'];
+function grid(){const st=['online','sync ✓','aktywny','miksuje','buduje APK','słucha'];const live=decks.filter(d=>d.play).length;grid_.innerHTML=AG.map((a,i)=>`<div class="ag">🤖 <b>${a}</b><br><i>● ${st[(i+Math.floor(Date.now()/4000))%st.length]}</i><br>mózg: ${live} decków</div>`).join('')}
+const grid_=document.getElementById('grid');grid();setInterval(grid,4000);
+function say(c,t){chat.innerHTML+=`<div class="m ${c}">${c=='u'?'Ty':'🐉 SI'}: ${t}</div>`;chat.scrollTop=1e9}
+function brain(q){const s=q.toLowerCase(),num=(s.match(/\d{2,3}/)||[])[0],bpm=num&&+num>=80&&+num<=180?+num:null,dn=s.match(/deck\w*\s*(\d+)/),dk=dn?+dn[1]-1:null;
+ const style=Object.keys(STY).find(k=>s.includes(k))||(s.includes('hard')?'hard':null);
+ if(/stop.*mix|wyłącz.*mix|zatrzymaj.*mix/.test(s))return B.autoMix(false);
+ if(/auto ?mix|automix|miksuj sam|ai dj/.test(s)){tab('ai');return B.autoMix(true)}
+ if(/scratch|skrecz/.test(s))return B.fx('scratch',dk);
+ if(/generuj|wygeneruj|nowy loop/.test(s)){if(style)gs.value=style;return B.generate(style,bpm)}
+ if(/efekt|fx|echo|filtr|stutter|brake|hamuj|riser/.test(s)){const t=/echo/.test(s)?'echo':/filtr/.test(s)?'filter':/stutter/.test(s)?'stutter':/brake|hamuj/.test(s)?'brake':/riser/.test(s)?'riser':/off|wyłącz/.test(s)?'off':'echo';return B.fx(t,dk)}
+ if(/^stop|zatrzymaj|cisza|wyłącz/.test(s))return B.stopAll();
+ if(/graj|zagraj|odpal|puść|play/.test(s))return B.play(style,bpm,dk);
+ if(/bpm|tempo/.test(s)&&bpm){const d=B.deck(dk);d.setBpm(bpm);return `Ustawiłem ${bpm} BPM na decku ${d.i+1}.`}
+ if(dk!=null){B.deck(dk);return `Wybrany deck ${dk+1}.`}
+ if(/głośniej/.test(s)){mv.value=Math.min(1,+mv.value+.1);mv.oninput();return '🔊 Głośniej!'}
+ if(/ciszej/.test(s)){mv.value=Math.max(0,+mv.value-.1);mv.oninput();return '🔉 Ciszej.'}
+ if(/status|co gra/.test(s)){const l=decks.filter(d=>d.play);return l.length?'Grają: '+l.map(d=>`deck ${d.i+1} (${d.style} ${d.bpm})`).join(', '):'Nic nie gra. Napisz "graj techno 140".'}
+ if(/cze|hej|siema|witaj|elo/.test(s))return 'Siema! Jestem wspólnym mózgiem SI DJ 777. Steruję 10 deckami — napisz np. "graj techno 140" albo "auto mix".';
+ if(/whatsapp|kontakt|booking|rezerw/.test(s)){tab('wa');return 'Booking DJ DaX: WhatsApp +48 730 377 357.'}
+ if(/agent|777|bot/.test(s)){tab('ag');return 'Sieć 777 agentów: '+AG.slice(0,8).join(', ')+'… wszystkie podpięte do jednego mózgu.'}
+ if(/pomoc|help|komend/.test(s))return 'Komendy: graj techno 140 · auto mix · stop mix · scratch · generuj loop acid · efekt echo/filtr/stutter/brake/riser · deck 3 · bpm 135 · głośniej · status · stop';
+ if(/dzięk/.test(s))return 'Nie ma sprawy! Głośno i do rana 🔊';
+ return 'Nie zrozumiałem. Napisz "pomoc", żeby zobaczyć komendy.'}
+function send(){const v=document.getElementById('in').value.trim();if(!v)return;say('u',v);document.getElementById('in').value='';const r=brain(v);setTimeout(()=>say('b',r),200)}
+document.getElementById('in').onkeydown=e=>{if(e.key=='Enter')send()};say('b','Cześć! 🐉 Jestem mózgiem SI. Steruję DJ-em po polsku — spróbuj: "graj techno 140", "auto mix", "scratch", "generuj loop", "efekt echo".');
 </script></body></html>
